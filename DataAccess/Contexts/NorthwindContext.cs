@@ -10,12 +10,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Contexts
 {
-    public class NorthwindContext : DbContext
+    public class ETradeContext : DbContext
     {
         protected IConfiguration Configuration { get; set; }
         public DbSet<Product> Products { get; set; }
 
-        public NorthwindContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(
+        public ETradeContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(
             dbContextOptions)
         {
             Configuration = configuration; 
