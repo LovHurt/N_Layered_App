@@ -1,5 +1,6 @@
 
 using Business;
+using Core.CrossCuttingConcerns.Exceptions.Extensions;
 using DataAccess;
 
 
@@ -31,10 +32,11 @@ namespace WebAPI
                 app.UseSwaggerUI();
             }
 
+            app.ConfigureCustomExceptionMiddleware();
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

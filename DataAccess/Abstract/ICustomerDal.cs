@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IProductDal:IRepository<Product, int>, IAsyncRepository<Product, int>
+    public interface ICustomerDal : IRepository<Customer, string>, IAsyncRepository<Customer, string>
     {
-
     }
 }

@@ -10,21 +10,26 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Contexts
 {
-    public class ETradeContext : DbContext
+    public class NorthwindContext : DbContext
     {
         protected IConfiguration Configuration { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
-        public ETradeContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(
+
+
+        public NorthwindContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(
             dbContextOptions)
         {
             Configuration = configuration; 
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //Konfigirasyon dosyalarını bul ve onu uygula demek
         }
     }
 }
