@@ -23,15 +23,12 @@ namespace Business
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IProductService, ProductManager>();
-
             services.AddScoped<ICategoryService, CategoryManager>();
-
             services.AddScoped<ICustomerService, CustomerManager>();
 
             services.AddScoped<ProductBusinessRules>();
             services.AddScoped<CustomerBusinessRules>();
             services.AddScoped<CategoryBusinessRules>();
-
 
 
             return services;
