@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.CrossCuttingConcerns.Exceptions.Handlers;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Core.CrossCuttingConcerns.Exceptions
 {
@@ -30,12 +32,24 @@ namespace Core.CrossCuttingConcerns.Exceptions
             {
                 await _next(context);
             }
+
+            //catch (ValidationException validationException)
+            //{
+            //    context.Response.StatusCode = 400; // Bad Request
+            //    context.Response.ContentType = "application/json";
+            //    await context.Response.WriteAsync(validationException.Message);
+            //}
             catch (Exception exception)
             {
                // await LogException(context, exception);
                 await HandleExceptionAsync(context.Response, exception);
             }
 
+        
+
+            // Do everything that your middleware needs to do
+            // When finished, call the next delegate/middleware in the pipeline.
+            // await _next(context);
         }
 
         //private Task LogException(HttpContext context, Exception exception)

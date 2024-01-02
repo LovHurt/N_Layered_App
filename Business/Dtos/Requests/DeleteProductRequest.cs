@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Business.Dtos.Requests
 {
-    public class UpdateCustomerRequest
+    public class DeleteProductRequest
     {
-        public string Id { get; set; }
-        public string CompanyName { get; set; }
+        public int Id { get; set; }
     }
 }

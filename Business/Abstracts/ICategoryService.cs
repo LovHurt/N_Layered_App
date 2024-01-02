@@ -11,5 +11,6 @@ namespace Business.Abstracts
     public interface ICategoryService
     {
         Task<CreatedCategoryResponse> Add(CreateCategoryRequest createCategoryRequest);
+        Task<CreatedCategoryResponse> Delete(DeleteCategoryRequest deleteCategoryRequest);
     }
 }

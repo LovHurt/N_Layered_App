@@ -17,10 +17,13 @@ namespace Business.AutoMapper.Profiles
         {
             CreateMap<Product, GetListProductResponse>()
                 .ForMember(destinationMember: p => p.CategoryName, memberOptions: opt => opt.MapFrom(p => p.Category.Name)).ReverseMap();
+
             CreateMap<IPaginate<Product>, Paginate<GetListProductResponse>>().ReverseMap();
 
             CreateMap<Product, CreateProductRequest>().ReverseMap();
             CreateMap<Product, CreatedProductResponse>().ReverseMap();
+            CreateMap<Product, DeleteProductRequest>().ReverseMap();
+
         }
     }
 }

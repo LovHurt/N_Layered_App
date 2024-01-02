@@ -1,5 +1,8 @@
-﻿using Business.Abstracts;
+﻿using Business;
+using Business.Abstracts;
 using Business.Dtos.Requests;
+using Business.Rules.ValidationRules;
+using Core.CrossCuttingConcerns.Exceptions;
 using Core.DataAccess.Paging;
 using Entities.Concretes;
 using Microsoft.AspNetCore.Http;
@@ -19,8 +22,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [ValidateEntity(typeof(CreateProductRequestValidator))]
+
         public async Task<IActionResult> Add([FromBody] CreateProductRequest createProductRequest)
         {
+            ValidateEntityAttributeExtensions.ValidateEntity(this);
+
             var result = await _productService.Add(createProductRequest); 
 
             return Ok(result);
@@ -30,6 +37,13 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
         {
             var result = await _productService.GetListAsync(pageRequest); 
+
+            return Ok(result);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteProductRequest deleteProductRequest)
+        {
+            var result = await _productService.Delete(deleteProductRequest);
 
             return Ok(result);
         }

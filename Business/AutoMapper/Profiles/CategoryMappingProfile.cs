@@ -17,6 +17,7 @@ namespace Business.AutoMapper.Profiles
         {
             CreateMap<Category, CreateCategoryRequest>().ReverseMap();
             CreateMap<Category, CreatedCategoryResponse>().ReverseMap();
+            CreateMap<Category, DeleteCategoryRequest>().ReverseMap();
         }
     }
 }

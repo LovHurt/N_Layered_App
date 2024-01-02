@@ -38,5 +38,16 @@ namespace Business.Concretes
 
             return result;
         }
+
+        public async Task<CreatedCategoryResponse> Delete(DeleteCategoryRequest deleteCategoryRequest)
+        {
+            Category category = await _categoryDal.GetAsync(predicate:i => i.Id == deleteCategoryRequest.Id);
+
+            var deletedCategory = await _categoryDal.DeleteAsync(category);
+
+            CreatedCategoryResponse result = _mapper.Map<CreatedCategoryResponse>(deletedCategory);
+
+            return result;
+        }
     }
 }

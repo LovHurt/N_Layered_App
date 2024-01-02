@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
+using ValidationException = Core.CrossCuttingConcerns.Exceptions.Types.ValidationException;
 
 namespace Core.CrossCuttingConcerns.Exceptions.Handlers
 {
@@ -27,18 +28,18 @@ namespace Core.CrossCuttingConcerns.Exceptions.Handlers
             return Response.WriteAsync(details);
         }
 
-        //protected override Task HandleException(Exception exception)
-        //{
-        //    Response.StatusCode = StatusCodes.Status500InternalServerError;
-        //    string details = new InternalServerErrorProblemDetails(exception.Message).AsJson();
-        //    return Response.WriteAsync(details);
-        //}
+        protected override Task HandleException(Exception exception)
+        {
+            Response.StatusCode = StatusCodes.Status500InternalServerError;
+            string details = new InternalServerErrorProblemDetails(exception.Message).AsJson();
+            return Response.WriteAsync(details);
+        }
 
-        //protected override Task HandleException(ValidationException validationException)
-        //{
-        //    Response.StatusCode = StatusCodes.Status400BadRequest;
-        //    string details = new ValidationProblemDetails(validationException.Errors).AsJson();
-        //    return Response.WriteAsync(details);
-        //}
+        protected override Task HandleException(ValidationException validationException)
+        {
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            string details = new ValidationProblemDetails(validationException.Errors).AsJson();
+            return Response.WriteAsync(details);
+        }
     }
 }

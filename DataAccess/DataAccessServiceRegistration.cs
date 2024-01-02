@@ -19,12 +19,10 @@ namespace DataAccess
             {
                 //services.AddDbContext<NorthwindContext>(options => options.UseInMemoryDatabase("nArchitecture"));
 
-                //services.AddDbContext<ETradeContext>(options => options.UseSqlServer(configuration.GetConnectionString("ETrade")));
-                services.AddDbContext<NorthwindContext>(options => options.UseSqlServer(configuration.GetConnectionString("Northwind")));
+                services.AddDbContext<NorthwindContext>(options => options.UseSqlServer(configuration.GetConnectionString("ETrade")));
 
             services.AddScoped<IProductDal, EfProductDal>();
             services.AddScoped<ICategoryDal, EfCategoryDal>();
-            services.AddScoped<ICustomerDal, EfCustomerDal>();
 
 
             return services;

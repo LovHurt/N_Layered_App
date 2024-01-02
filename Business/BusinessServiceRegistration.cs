@@ -13,6 +13,9 @@ using Business.Abstracts;
 using Business.Concretes;
 using Business.Rules;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation.AspNetCore;
+using Business.Rules.ValidationRules;
+using FluentValidation;
 
 namespace Business
 {
@@ -22,33 +25,37 @@ namespace Business
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+
             services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<ICategoryService, CategoryManager>();
-            services.AddScoped<ICustomerService, CustomerManager>();
 
             services.AddScoped<ProductBusinessRules>();
-            services.AddScoped<CustomerBusinessRules>();
             services.AddScoped<CategoryBusinessRules>();
+
+            services.AddValidatorsFromAssembly(Assembly.GetAssembly(typeof(CreateProductRequestValidator)));
+
 
 
             return services;
         }
 
-        //public static IServiceCollection AddSubClassesOfType(
-        //    this IServiceCollection services,
-        //    Assembly assembly,
-        //    Type type,
-        //    Func<IServiceCollection, Type, IServiceCollection>? addWithLifeCycle = null
-        //)
-        //{
-        //    var types = assembly.GetTypes().Where(t => t.IsSubclassOf(type) && type != t).ToList();
-        //    foreach (var item in types)
-        //        if (addWithLifeCycle == null)
-        //            services.AddScoped(item);
+        public static IServiceCollection AddSubClassesOfType(
+            this IServiceCollection services,
+            Assembly assembly,
+            Type type,
+            Func<IServiceCollection, Type, IServiceCollection>? addWithLifeCycle = null
+        )
+        {
+            var types = assembly.GetTypes().Where(t => t.IsSubclassOf(type) && type != t).ToList();
+            foreach (var item in types)
+                if (addWithLifeCycle == null)
+                    services.AddScoped(item);
 
-        //        else
-        //            addWithLifeCycle(services, type);
-        //    return services;
-        //}
+                else
+                    addWithLifeCycle(services, type);
+            return services;
+        }
+
+
     }
 }

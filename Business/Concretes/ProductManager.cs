@@ -42,6 +42,17 @@ namespace Business.Concretes
             return createdProductResponse;
         }
 
+        public async Task<CreatedProductResponse> Delete(DeleteProductRequest deleteProductRequest)
+        {
+            Product product = await _productDal.GetAsync(predicate:p => p.Id == deleteProductRequest.Id);
+
+            var deletedProduct = await _productDal.DeleteAsync(product);
+
+            var result = _mapper.Map<CreatedProductResponse>(deletedProduct);
+
+            return result;
+        }
+
         public async Task<IPaginate<GetListProductResponse>> GetListAsync(PageRequest pageRequest)
         {
             var data = await _productDal.GetListAsync(
