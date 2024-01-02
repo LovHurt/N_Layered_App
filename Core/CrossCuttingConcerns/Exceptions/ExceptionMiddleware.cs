@@ -13,7 +13,7 @@ namespace Core.CrossCuttingConcerns.Exceptions
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly HttpExceptionHandler _httpExceptionHandler;
+        private readonly HttpExceptionHandler _httpExceptionHandler; 
         //private readonly IHttpContextAccessor _contextAccessor;
        // private readonly LoggerServiceBase _loggerService;
 
@@ -32,24 +32,11 @@ namespace Core.CrossCuttingConcerns.Exceptions
             {
                 await _next(context);
             }
-
-            //catch (ValidationException validationException)
-            //{
-            //    context.Response.StatusCode = 400; // Bad Request
-            //    context.Response.ContentType = "application/json";
-            //    await context.Response.WriteAsync(validationException.Message);
-            //}
             catch (Exception exception)
             {
                // await LogException(context, exception);
                 await HandleExceptionAsync(context.Response, exception);
             }
-
-        
-
-            // Do everything that your middleware needs to do
-            // When finished, call the next delegate/middleware in the pipeline.
-            // await _next(context);
         }
 
         //private Task LogException(HttpContext context, Exception exception)

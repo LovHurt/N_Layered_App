@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation.AspNetCore;
 using Business.Rules.ValidationRules;
 using FluentValidation;
+using Business.Dtos.Requests;
 
 namespace Business
 {
@@ -32,7 +33,7 @@ namespace Business
             services.AddScoped<ProductBusinessRules>();
             services.AddScoped<CategoryBusinessRules>();
 
-            services.AddValidatorsFromAssembly(Assembly.GetAssembly(typeof(CreateProductRequestValidator)));
+            services.AddScoped<IValidator<CreateProductRequest>, CreateProductRequestValidator>();
 
 
 

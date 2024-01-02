@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
 using ValidationException = Core.CrossCuttingConcerns.Exceptions.Types.ValidationException;
+using ValidationProblemDetails = Core.CrossCuttingConcerns.Exceptions.HttpProblemDetails.ValidationProblemDetails;
 
 namespace Core.CrossCuttingConcerns.Exceptions.Handlers
 {

@@ -5,6 +5,7 @@ using Business.Rules.ValidationRules;
 using Core.CrossCuttingConcerns.Exceptions;
 using Core.DataAccess.Paging;
 using Entities.Concretes;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,19 +16,19 @@ namespace WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         IProductService _productService;
+        IValidator<CreateProductRequest> _validator;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IValidator<CreateProductRequest> validator)
         {
             _productService = productService;
+            _validator = validator;
         }
 
         [HttpPost]
-        [ValidateEntity(typeof(CreateProductRequestValidator))]
 
         public async Task<IActionResult> Add([FromBody] CreateProductRequest createProductRequest)
         {
-            ValidateEntityAttributeExtensions.ValidateEntity(this);
-
+            _validator.ValidateAndThrow(createProductRequest);
             var result = await _productService.Add(createProductRequest); 
 
             return Ok(result);
