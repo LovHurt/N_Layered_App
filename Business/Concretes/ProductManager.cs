@@ -12,6 +12,10 @@ using Business.Dtos.Requests;
 using Business.Dtos.Responses;
 using Business.Rules;
 using Microsoft.EntityFrameworkCore;
+using Core.CrossCuttingConcerns.Exceptions.Types;
+using FluentValidation;
+using ValidationException = Core.CrossCuttingConcerns.Exceptions.Types.ValidationException;
+using Business.Rules.ValidationRules;
 
 namespace Business.Concretes
 {

@@ -18,28 +18,20 @@ namespace WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         IProductService _productService;
-        IValidator<CreateProductRequest> _validator;
+        //IValidator<CreateProductRequest> _validator;
 
-        public ProductsController(IProductService productService, IValidator<CreateProductRequest> validator)
+        public ProductsController(IProductService productService/*, IValidator<CreateProductRequest> validator*/)
         {
             _productService = productService;
-            _validator = validator;
+            //_validator = validator;
         }
 
         [HttpPost]
+        [ValidateModelAttribute(typeof(CreateProductRequestValidator))]
 
         public async Task<IActionResult> Add([FromBody] CreateProductRequest createProductRequest)
         {
-            var validationResult = _validator.Validate(createProductRequest);
 
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors.Select(error => new ValidationExceptionModel
-                {
-                    Property = error.PropertyName,
-                    Errors = new List<string> { error.ErrorMessage }
-                }));
-            }
             var result = await _productService.Add(createProductRequest); 
 
             return Ok(result);
