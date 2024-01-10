@@ -1,9 +1,20 @@
 
 using Business;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
+using Core.CrossCuttingConcerns.Logging;
 using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Core.Utilities.Security.Enycryption;
+using Core.Utilities.Security.JWT;
+using Business.Security.BusinessAspects.Autofac;
+using Business.Security;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+//using Business.DependencyResolvers.Autofac;
 
 namespace WebAPI
 {
@@ -13,16 +24,48 @@ namespace WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            LoggingConfig.Configure();
+
             // Add services to the container.
 
             builder.Services.AddControllers();
 
+
             builder.Services.AddBusinessServices();
             builder.Services.AddDataAccessServices(builder.Configuration);
 
-            builder.Services.AddCors(opt => opt.AddDefaultPolicy(p => { p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
+            //builder.Services.AddCors(opt => opt.AddDefaultPolicy(p => { p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+
+            var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = tokenOptions.Issuer,
+                        ValidAudience = tokenOptions.Audience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+                    };
+                });
+
+        
+
+
+            //builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+            //builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+            //     {
+            //         builder.RegisterModule(new AutofacBusinessModule());
+            //     });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -33,18 +76,22 @@ namespace WebAPI
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
             }
 
             app.ConfigureCustomExceptionMiddleware();
 
 
             app.UseHttpsRedirection();
+            //app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.MapControllers();
 
-            app.UseCors(opt => opt.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+            //app.UseCors(opt => opt.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+
+
 
             app.Run();
         }

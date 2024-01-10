@@ -1,5 +1,6 @@
 ﻿using Business.Abstracts;
 using Business.Dtos.Requests;
+using Core.CrossCuttingConcerns.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,8 @@ namespace WebAPI.Controllers
 
 
         [HttpPost]
+        [LogActionFilter]
+
         public async Task<IActionResult> Add([FromBody] CreateCategoryRequest createCategoryRequest)
         {
             var result = await _categoryService.Add(createCategoryRequest);

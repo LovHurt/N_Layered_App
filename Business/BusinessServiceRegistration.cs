@@ -17,6 +17,9 @@ using FluentValidation.AspNetCore;
 using Business.Rules.ValidationRules;
 using FluentValidation;
 using Business.Dtos.Requests;
+using Core.Business.Rules;
+using Microsoft.AspNetCore.Identity;
+using Core.Utilities.Security.JWT;
 
 namespace Business
 {
@@ -29,9 +32,22 @@ namespace Business
 
             services.AddScoped<IProductService, ProductManager>();
             services.AddScoped<ICategoryService, CategoryManager>();
+            services.AddScoped<IUserService, UserManager>();
+            services.AddScoped<IAuthService, AuthManager>();
+
+            services.AddScoped<ITokenHelper, JwtHelper>();
+
+
+            //services.AddScoped<IUserOperationClaimService, UserOperationClaimManager>();
+            //services.AddScoped<IOperationClaimService, OperationClaimManager>();
+
+            //services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
+
 
             services.AddScoped<ProductBusinessRules>();
             services.AddScoped<CategoryBusinessRules>();
+            services.AddScoped<UserBusinessRules>();
+
 
             services.AddScoped<IValidator<CreateProductRequest>, CreateProductRequestValidator>();
 

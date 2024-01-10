@@ -2,8 +2,10 @@
 using Business.Abstracts;
 using Business.Dtos.Requests;
 using Business.Rules.ValidationRules;
+using Business.Security.BusinessAspects.Autofac;
 using Core.CrossCuttingConcerns.Exceptions;
 using Core.CrossCuttingConcerns.Exceptions.Types;
+using Core.CrossCuttingConcerns.Logging;
 using Core.DataAccess.Paging;
 using Entities.Concretes;
 using FluentValidation;
@@ -15,20 +17,20 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class ProductsController : ControllerBase
     {
         IProductService _productService;
-        //IValidator<CreateProductRequest> _validator;
 
-        public ProductsController(IProductService productService/*, IValidator<CreateProductRequest> validator*/)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
-            //_validator = validator;
         }
 
         [HttpPost]
-        [ValidateModelAttribute(typeof(CreateProductRequestValidator))]
-
+        [SecuredOperation("product.add,admin")]
+        [ValidateModel(typeof(CreateProductRequestValidator))]
+        [LogActionFilter]
         public async Task<IActionResult> Add([FromBody] CreateProductRequest createProductRequest)
         {
 
@@ -45,6 +47,8 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpDelete]
+        [LogActionFilter]
+
         public async Task<IActionResult> Delete([FromBody] DeleteProductRequest deleteProductRequest)
         {
             var result = await _productService.Delete(deleteProductRequest);

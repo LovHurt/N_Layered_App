@@ -11,9 +11,9 @@ using Entities.Concretes;
 
 namespace Business.AutoMapper.Profiles
 {
-    public class ProductProfile : Profile
+    public class ProductMappingProfile : Profile
     {
-        public ProductProfile()
+        public ProductMappingProfile()
         {
             CreateMap<Product, GetListProductResponse>()
                 .ForMember(destinationMember: p => p.CategoryName, memberOptions: opt => opt.MapFrom(p => p.Category.Name)).ReverseMap();

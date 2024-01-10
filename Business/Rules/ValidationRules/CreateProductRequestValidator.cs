@@ -14,9 +14,12 @@ namespace Business.Rules.ValidationRules
     {
         public CreateProductRequestValidator()
         {
-            RuleFor(x => x.ProductName).NotEmpty().WithErrorCode(ValidationMessages.ProductNameMustNotBeEmpty);
-;
+            RuleFor(x => x.ProductName).NotEmpty();
+            //.WithErrorCode(ValidationMessages.ProductNameMustNotBeEmpty);
+            ;
             RuleFor(x => x.UnitPrice).GreaterThan(0).WithErrorCode(ValidationMessages.ProductPriceMustBeHigherThanZero);
+
+            RuleFor(x => x.UnitsInStock).GreaterThan((short)0);
         }
     }
 }

@@ -15,18 +15,22 @@ namespace DataAccess
 {
     public static class DataAccessServiceRegistration
     {
-            public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
-            {
-                //services.AddDbContext<NorthwindContext>(options => options.UseInMemoryDatabase("nArchitecture"));
+        public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            //services.AddDbContext<NorthwindContext>(options => options.UseInMemoryDatabase("nArchitecture"));
 
-                services.AddDbContext<NorthwindContext>(options => options.UseSqlServer(configuration.GetConnectionString("ETrade")));
+            services.AddDbContext<NorthwindContext>(options => options.UseSqlServer(configuration.GetConnectionString("ETrade")));
 
             services.AddScoped<IProductDal, EfProductDal>();
             services.AddScoped<ICategoryDal, EfCategoryDal>();
+            services.AddScoped<IUserDal, EfUserDal>();
+
+            services.AddScoped<IOperationClaimDal, EfOperationClaimDal>();
+            services.AddScoped<IUserOperationClaimDal, EfUserOperationClaimDal>();
 
 
             return services;
-            }
-        
+        }
+
     }
 }
