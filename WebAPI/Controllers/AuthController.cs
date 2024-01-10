@@ -2,6 +2,7 @@
 using Business.Abstracts;
 using Business.Dtos.Requests;
 using Entities.Concretes;
+using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -19,18 +20,18 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
         {
-            var loginResult = await _authService.Login(user);
+            var loginResult = await _authService.Login(userForLoginDto);
 
-            if (loginResult == null) 
+            if (loginResult == null)
             {
                 return BadRequest("Login failed");
             }
 
             var accessTokenResult = await _authService.CreateAccessToken(loginResult);
 
-            if (accessTokenResult == null) 
+            if (accessTokenResult == null)
             {
                 return BadRequest("Access token creation failed");
             }
@@ -39,28 +40,38 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] CreateUserRequest createUserRequest)
+        public async Task<IActionResult> Register([FromBody] UserForRegisterDto userForRegisterDto)
         {
-            User user = _mapper.Map<User>(createUserRequest);
-
-            var userExists = await _authService.UserExists(user);
-
-            if (userExists != null)
+            try
             {
-                return BadRequest("Register failed");
+                var userExists = await _authService.UserExists(userForRegisterDto.Email);
+
+                if (userExists != null)
+                {
+                    return BadRequest("User with this email already exists");
+                }
+
+                var registerResult = await _authService.Register(userForRegisterDto, userForRegisterDto.Password);
+
+                if (registerResult == null)
+                {
+                    return BadRequest("Register failed");
+                }
+
+                var accessTokenResult = await _authService.CreateAccessToken(registerResult);
+
+                if (accessTokenResult != null)
+                {
+                    return Ok(accessTokenResult);
+
+                }
+                return BadRequest("Access token creation failed");
             }
-
-            var registerResult = await _authService.Register(user);
-
-            var accessTokenResult = await _authService.CreateAccessToken(registerResult);
-
-            if (accessTokenResult != null)
+            catch (Exception ex)
             {
-                return Ok(accessTokenResult);
-
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Internal Server Error");
             }
-            return BadRequest("Access token creation failed");
-
         }
     }
 }

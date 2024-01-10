@@ -17,9 +17,13 @@ namespace Business.AutoMapper.Profiles
         {
 
             CreateMap<User, CreateUserRequest>().ReverseMap();
-            CreateMap<User, CreatedUserResponse>().ReverseMap();
             CreateMap<User, DeleteUserRequest>().ReverseMap();
             CreateMap<IPaginate<User>, Paginate<GetListUserResponse>>().ReverseMap();
+
+            CreateMap<User, CreatedUserResponse>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.PasswordHash))
+            .ReverseMap();
+
         }
     }
 }

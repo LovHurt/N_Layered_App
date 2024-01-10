@@ -7,7 +7,9 @@ using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
 using Entities.Concretes;
+using Entities.Dtos;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,16 +38,16 @@ public class AuthManager : IAuthService
         return accessToken;
     }
 
-    public async Task<User> Login(User user)
+    public async Task<User> Login(UserForLoginDto userForLoginDto)
     {
-        var userToCheck = await _userService.GetByEmail(user);
+        var userToCheck = await _userService.GetByEmail(userForLoginDto.Email);
 
         if (userToCheck == null)
         {
             throw new BusinessException(BusinessMessages.UserCanNotBeFound);
         }
 
-        if (!HashingHelper.VerifyPasswordHash(user.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
+        if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
         {
             throw new BusinessException(BusinessMessages.PasswordError);
         }
@@ -53,36 +55,38 @@ public class AuthManager : IAuthService
         return userToCheck;
     }
 
-    public async Task<User> Register(User userx)
+    public async Task<User> Register(UserForRegisterDto userForRegisterDto, string password)
     {
         byte[] passwordHash, passwordSalt;
-        HashingHelper.CreatePasswordHash(userx.Password, out passwordHash, out passwordSalt);
+        HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
         var user = new User
         {
-            Email = userx.Email,
-            FirstName = userx.FirstName,
-            LastName = userx.LastName,
+            Email = userForRegisterDto.Email,
+            FirstName = userForRegisterDto.FirstName,
+            LastName = userForRegisterDto.LastName,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             Status = true
         };
 
-        var addedUser = await _userService.Add(user);
-
-        User result = _mapper.Map<User>(addedUser);
+        var result = await _userService.Add(user);
 
         return result;
     }
 
-    public async Task<User> UserExists(User user)
+    public async Task<User> UserExists(string email)
     {
-        if (_userService.GetByEmail(user) != null)
-        {
-            throw new BusinessException(BusinessMessages.UserAlreadyExists);
 
+        var existingUser = await _userService.GetByEmail(email);
+
+        if (existingUser != null)
+        {
+            //throw new InvalidOperationException("User already exists");
+            return existingUser;
         }
-        return user;
+
+        return null;
     }
 }
 

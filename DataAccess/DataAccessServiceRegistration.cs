@@ -25,8 +25,8 @@ namespace DataAccess
             services.AddScoped<ICategoryDal, EfCategoryDal>();
             services.AddScoped<IUserDal, EfUserDal>();
 
-            services.AddScoped<IOperationClaimDal, EfOperationClaimDal>();
-            services.AddScoped<IUserOperationClaimDal, EfUserOperationClaimDal>();
+            //services.AddScoped<IOperationClaimDal, EfOperationClaimDal>();
+            //services.AddScoped<IUserOperationClaimDal, EfUserOperationClaimDal>();
 
 
             return services;

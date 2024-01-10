@@ -15,9 +15,8 @@ namespace Business.Abstracts
         Task<IPaginate<GetListUserResponse>> GetListAsync(PageRequest pageRequest);
         Task<CreatedUserResponse> Delete(DeleteUserRequest deleteUserRequest);
         Task<List<OperationClaim>> GetClaims(User user);
-        Task<CreatedUserResponse> Add(User user);
-
-        Task<User> GetByEmail(User user);
+        Task<User> Add(User user);
+        Task<User> GetByEmail(string email);
 
     }
 }

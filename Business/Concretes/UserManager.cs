@@ -76,19 +76,17 @@ namespace Business.Concretes
             return userClaims;
         }
 
-        public async Task<CreatedUserResponse> Add(User user)
+        public async Task<User> Add(User user)
         {
 
-            var createdUser = await _userDal.AddAsync(user);
-
-            CreatedUserResponse result = _mapper.Map<CreatedUserResponse>(createdUser);
+            var result = await _userDal.AddAsync(user);
 
             return result;
         }
 
-        public async Task<User> GetByEmail(User user)
+        public async Task<User> GetByEmail(string mail)
         {
-            var result = await _userDal.GetAsync(c => c.Email == user.Email);
+            var result = await _userDal.GetAsync(c => c.Email == mail);
 
             return result;
         }
