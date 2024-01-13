@@ -1,9 +1,4 @@
 ﻿using DataAccess.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Business.Abstracts;
 using Entities.Concretes;
@@ -12,10 +7,6 @@ using Business.Dtos.Requests;
 using Business.Dtos.Responses;
 using Business.Rules;
 using Microsoft.EntityFrameworkCore;
-using Core.CrossCuttingConcerns.Exceptions.Types;
-using FluentValidation;
-using ValidationException = Core.CrossCuttingConcerns.Exceptions.Types.ValidationException;
-using Business.Rules.ValidationRules;
 
 namespace Business.Concretes
 {
@@ -31,7 +22,6 @@ namespace Business.Concretes
             _mapper = mapper;
             _productDal = productDal;
         }
-
 
         public async Task<CreatedProductResponse> Add(CreateProductRequest createProductRequest)
         {

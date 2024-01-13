@@ -22,21 +22,25 @@ namespace WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
         {
-            var loginResult = await _authService.Login(userForLoginDto);
+          
+                var loginResult = await _authService.Login(userForLoginDto);
 
-            if (loginResult == null)
-            {
-                return BadRequest("Login failed");
-            }
+                if (loginResult == null)
+                {
+                    return BadRequest("Login failed");
+                }
 
-            var accessTokenResult = await _authService.CreateAccessToken(loginResult);
+                var accessTokenResult = await _authService.CreateAccessToken(loginResult);
 
-            if (accessTokenResult == null)
-            {
-                return BadRequest("Access token creation failed");
-            }
+                if (accessTokenResult == null)
+                {
 
-            return Ok(accessTokenResult);
+                    return BadRequest("Access token creation failed");
+                }
+
+                return Ok(accessTokenResult);
+
+            
         }
 
         [HttpPost("register")]

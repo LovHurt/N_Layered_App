@@ -2,7 +2,8 @@
 using Business.Abstracts;
 using Business.Dtos.Requests;
 using Business.Rules.ValidationRules;
-using Business.Security.BusinessAspects.Autofac;
+using Business.Security;
+using Business.Security.Authorization;
 using Core.CrossCuttingConcerns.Exceptions;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.CrossCuttingConcerns.Logging;
@@ -27,22 +28,22 @@ namespace WebAPI.Controllers
             _productService = productService;
         }
 
-        [HttpPost]
-        [SecuredOperation("product.add,admin")]
+        [AuthorizeRole("Admin")]
+        [HttpPost("add")]
         [ValidateModel(typeof(CreateProductRequestValidator))]
         [LogActionFilter]
         public async Task<IActionResult> Add([FromBody] CreateProductRequest createProductRequest)
         {
 
-            var result = await _productService.Add(createProductRequest); 
+            var result = await _productService.Add(createProductRequest);
 
             return Ok(result);
         }
 
-        [HttpGet]
+        [HttpGet("getlist")]
         public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
         {
-            var result = await _productService.GetListAsync(pageRequest); 
+            var result = await _productService.GetListAsync(pageRequest);
 
             return Ok(result);
         }

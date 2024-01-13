@@ -20,6 +20,8 @@ using Business.Dtos.Requests;
 using Core.Business.Rules;
 using Microsoft.AspNetCore.Identity;
 using Core.Utilities.Security.JWT;
+//using Business.Security.BusinessAspects.Interceptors;
+using Castle.DynamicProxy;
 
 namespace Business
 {
@@ -35,11 +37,9 @@ namespace Business
             services.AddScoped<IUserService, UserManager>();
             services.AddScoped<IAuthService, AuthManager>();
 
+            
+
             services.AddScoped<ITokenHelper, JwtHelper>();
-
-
-            //services.AddScoped<IUserOperationClaimService, UserOperationClaimManager>();
-            //services.AddScoped<IOperationClaimService, OperationClaimManager>();
 
             //services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
 

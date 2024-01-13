@@ -60,21 +60,23 @@ namespace Business.Concretes
 
         }
 
-
         public async Task<List<OperationClaim>> GetClaims(User user)
         {
             var data = await _userDal.GetListAsync(
+                predicate: u => u.Id == user.Id,
                 include: q => q.Include(u => u.UserOperationClaims).ThenInclude(uoc => uoc.OperationClaim)
             );
 
             var userClaims = data.Items
-                .Where(u => u.Id == user.Id)
                 .SelectMany(u => u.UserOperationClaims)
                 .Select(uoc => uoc.OperationClaim)
                 .ToList();
 
             return userClaims;
         }
+
+
+
 
         public async Task<User> Add(User user)
         {
@@ -87,6 +89,13 @@ namespace Business.Concretes
         public async Task<User> GetByEmail(string mail)
         {
             var result = await _userDal.GetAsync(c => c.Email == mail);
+
+            return result;
+        }
+
+        public User GetById(int userId)
+        {
+            var result = _userDal.Get(i=>i.Id == userId);
 
             return result;
         }

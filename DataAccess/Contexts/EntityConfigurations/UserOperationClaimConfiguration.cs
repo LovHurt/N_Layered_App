@@ -13,7 +13,7 @@ namespace DataAccess.Contexts.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<UserOperationClaim> builder)
         {
-            builder.ToTable("UserOperationClaim").HasKey(b => b.Id);
+            builder.ToTable("UserOperationClaims").HasKey(b => b.Id);
 
             builder.Property(b => b.UserId).HasColumnName("UserId").IsRequired();
             builder.Property(b => b.OperationClaimId).HasColumnName("OperationClaimId").IsRequired();

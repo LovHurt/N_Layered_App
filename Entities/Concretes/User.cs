@@ -16,5 +16,6 @@ namespace Entities.Concretes
         public byte[] PasswordSalt { get; set; }
         public bool Status { get; set; }
         public List<UserOperationClaim> UserOperationClaims { get; set; }
+        //public List<UserRole> UserRole { get; set; }
     }
 }

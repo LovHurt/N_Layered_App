@@ -22,7 +22,9 @@ namespace DataAccess.Contexts.EntityConfigurations
             builder.Property(b => b.PasswordHash).HasColumnName("PasswordHash").IsRequired();
             builder.Property(b => b.PasswordSalt).HasColumnName("PasswordSalt").IsRequired();
 
-            builder.HasMany(b => b.UserOperationClaims);
+            builder.HasMany(b => b.UserOperationClaims)
+             .WithOne(uc => uc.User)
+                .HasForeignKey(uc => uc.UserId);
 
 
             builder.HasQueryFilter(b => !b.DeletedDate.HasValue);
