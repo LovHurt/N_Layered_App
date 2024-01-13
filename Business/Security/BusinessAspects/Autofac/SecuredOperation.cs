@@ -27,7 +27,6 @@ namespace Business.Security.BusinessAspects.Autofac
         {
             var httpContextAccessor = GetHttpContextAccessor();
 
-            //var roleClaims = _httpContextAccessor.HttpContext.User.ClaimRoles();
             var roleClaims = httpContextAccessor.HttpContext.User.ClaimRoles();
 
             foreach (var role in _roles)
